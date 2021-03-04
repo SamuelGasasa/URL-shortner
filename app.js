@@ -7,6 +7,7 @@ const fs = require("fs");
 const ID = 0;
 app.use(cors());
 app.use(express.json());
+app.use(express.urlencoded());
 
 app.use("/public", express.static(`./public`));
 
@@ -23,14 +24,16 @@ app.get("/api/shorturl/:shortUrl", (req, res) => {
   for (let i = 0; i < database.length; i++) {
     if (shortUrl === database[i].id) {
       url = database[i].url;
+      res.redirect(url);
     }
   }
-  res.redirect(url);
+  res.send("No shortened url found in the database");
 });
 
-app.post("/", (req, res) => {
+app.post("/DataBase/database.json", (req, res) => {
   let isExist = false;
   const { body } = req;
+  console.log(body);
   const data = fs.readFileSync("./DataBase/database.json", "utf8");
   const parseData = JSON.parse(data);
   for (let i = 0; i < parseData.length; i++) {
@@ -50,7 +53,7 @@ app.post("/", (req, res) => {
         if (e) {
           console.log(e);
         }
-        res.send(parseData);
+        res.send(body);
       },
     );
   }
