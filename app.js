@@ -14,6 +14,20 @@ app.get("/", (req, res) => {
   res.sendFile(__dirname + "/views/index.html");
 });
 
+app.get("/api/shorturl/:shortUrl", (req, res) => {
+  const { shortUrl } = req.params;
+  let url;
+  const database = JSON.parse(
+    fs.readFileSync("./DataBase/database.json", "utf8"),
+  );
+  for (let i = 0; i < database.length; i++) {
+    if (shortUrl === database[i].id) {
+      url = database[i].url;
+    }
+  }
+  res.redirect(url);
+});
+
 app.post("/", (req, res) => {
   let isExist = false;
   const { body } = req;
