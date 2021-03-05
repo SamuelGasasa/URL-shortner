@@ -26,48 +26,35 @@ app.get("/", (req, res) => {
 
 app.get("/api/shorturl/:shortUrl", (req, res) => {
   const { shortUrl } = req.params;
-  let url;
-  const database = JSON.parse(
-    fs.readFileSync("./DataBase/database.json", "utf8"),
-  );
-  for (let i = 0; i < database.length; i++) {
-    if (shortUrl === database[i].id) {
-      url = database[i].url;
-      res.redirect(url);
-    }
+  const db = new DataBase(req.body);
+  const url = db.getById(shortUrl);
+  if (url) {
+    res.redirect(url.url);
   }
   res.send("<h1>No shortened url found in the database</h1>");
 });
 
 app.post("/DataBase/database.json", (req, res) => {
-  let isExist = false;
+  const db = new DataBase();
   const { body } = req;
-  console.log(body);
-  const data = fs.readFileSync("./DataBase/database.json", "utf8");
-  const parseData = JSON.parse(data);
-  for (let i = 0; i < parseData.length; i++) {
-    if (parseData[i].url === body.url) {
-      isExist = true;
-      break;
-    }
-  }
-  if (isExist) {
+  if (db.isExist(body.url)) {
     res.send("url already exist!");
   } else {
     if (isUrlValid(body.url)) {
       if (isValidHostname(body.url)) {
-        body.id = ID;
-        ID += 1;
-        parseData.push(body);
-        fs.writeFile(
-          "./DataBase/database.json",
-          JSON.stringify(parseData, null, 4),
-          (e) => {
-            if (e) {
-              console.log(e);
-            }
-          },
-        );
+        body.id = 2;
+        // ID += 1;
+        // parseData.push(body);
+        // fs.writeFile(
+        //   "./DataBase/database.json",
+        //   JSON.stringify(parseData, null, 4),
+        //   (e) => {
+        //     if (e) {
+        //       console.log(e);
+        //     }
+        //   },
+        // );
+        db.postInData(body);
         res.send(body);
       }
       res.send("invalid hostname");
@@ -76,4 +63,45 @@ app.post("/DataBase/database.json", (req, res) => {
   }
 });
 
+class DataBase {
+  constructor(body) {
+    this.body = body;
+  }
+
+  getDataBase() {
+    const dataBase = fs.readFileSync("./DataBase/database.json");
+    return JSON.parse(dataBase);
+  }
+
+  getById(id) {
+    const db = this.getDataBase();
+    return db.find((element) => element.id === id);
+  }
+
+  postInData(body) {
+    const db = this.getDataBase();
+    db.push(body);
+    fs.writeFileSync("./DataBase/database.json", JSON.stringify(db));
+  }
+
+  isExist(url) {
+    const db = this.getDataBase();
+    if (db.find((element) => element.url === url)) {
+      console.log("truth");
+      return true;
+    }
+    console.log("false");
+    return false;
+  }
+
+  //   async writeFile(){
+  //       const dataBase=this.readFile();
+  //       console.lo
+  //   }
+}
+
+// const test = new DataBase();
+// test.readFile(testtest);
+// console.log(crazy);
+// console.log("should see it after");
 module.exports = app;

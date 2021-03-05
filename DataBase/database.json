@@ -1,10 +1,1 @@
-[
-    {
-        "url": "ynet.co.il",
-        "id": 0
-    },
-    {
-        "url": "walla.co.il",
-        "id": 0
-    }
-]
+[{"url":"https://www.google.com/","id":"0"},{"url":"http://walla.co.il","id":"1"},{"url":"ynet.co.il","id":2}]
