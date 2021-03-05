@@ -5,7 +5,7 @@ const app = express();
 const fs = require("fs");
 const isValidHostname = require("is-valid-hostname");
 
-const ID = 0;
+let ID = 0;
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded());
@@ -56,6 +56,8 @@ app.post("/DataBase/database.json", (req, res) => {
   } else {
     if (isUrlValid(body.url)) {
       if (isValidHostname(body.url)) {
+        body.id = ID;
+        ID += 1;
         parseData.push(body);
         fs.writeFile(
           "./DataBase/database.json",
@@ -64,11 +66,11 @@ app.post("/DataBase/database.json", (req, res) => {
             if (e) {
               console.log(e);
             }
-            res.send(body);
           },
         );
-        res.send("invalid hostname");
+        res.send(body);
       }
+      res.send("invalid hostname");
     }
     res.send("invalid url");
   }

@@ -1,36 +1,10 @@
 [
     {
-        "url": "https://www.google.com/",
-        "id": "123",
-        "createTime": 123
+        "url": "ynet.co.il",
+        "id": 0
     },
     {
-        "url": 1231113423,
-        "id": 31551,
-        "createTime": 425135
-    },
-    {
-        "url": 1231113423,
-        "id": 31551,
-        "createTime": 425135
-    },
-    {
-        "url": 1231113423
-    },
-    {},
-    {
-        "url": "oasihosV"
-    },
-    {
-        "url": "gakgjdla.com"
-    },
-    {
-        "url": "fslkhssbfal"
-    },
-    {
-        "url": "slkv.com"
-    },
-    {
-        "url": "sakdga.akjdga"
+        "url": "walla.co.il",
+        "id": 0
     }
 ]
