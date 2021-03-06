@@ -11,13 +11,13 @@ module.exports = class DataBase {
   //   }
 
   getById(req, res) {
-    console.log(this.database);
+    // console.log(this.database);
     const { shortUrl } = req.params;
     const url = this.database.db.find((element) => element.id === shortUrl);
     if (url) {
       res.redirect(url.url);
     }
-    res.send("<h1>No shortened url found in the database</h1>");
+    res.send("No shortened url found in the database");
   }
 
   postInData(req, res, id) {
