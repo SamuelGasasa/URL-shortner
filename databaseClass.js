@@ -3,6 +3,7 @@ module.exports = class DataBase {
     this.fs = require("fs");
     this.isValidHostname = require("is-valid-hostname");
     this.database = JSON.parse(this.fs.readFileSync(location));
+    this.validUrl = require("valid-url");
   }
 
   //   getDataBase() {
@@ -25,7 +26,8 @@ module.exports = class DataBase {
     if (this.isExist(body.url)) {
       res.send("url already exist!");
     } else {
-      if (this.isUrlValid(body.url)) {
+      if (this.validUrl.isWebUri(body.url)) {
+        console.log(body.url);
         if (this.isValidHostname(body.url)) {
           body.id = id;
           // ID += 1;
@@ -62,11 +64,10 @@ module.exports = class DataBase {
     return false;
   }
 
-  isUrlValid(url) {
-    const res = url.match(
-      /(http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/g,
-    );
-    if (res == null) return false;
-    else return true;
+  isValidURL(str) {
+    var urlRegex =
+      "^(?!mailto:)(?:(?:http|https|ftp)://)(?:\\S+(?::\\S*)?@)?(?:(?:(?:[1-9]\\d?|1\\d\\d|2[01]\\d|22[0-3])(?:\\.(?:1?\\d{1,2}|2[0-4]\\d|25[0-5])){2}(?:\\.(?:[0-9]\\d?|1\\d\\d|2[0-4]\\d|25[0-4]))|(?:(?:[a-z\\u00a1-\\uffff0-9]+-?)*[a-z\\u00a1-\\uffff0-9]+)(?:\\.(?:[a-z\\u00a1-\\uffff0-9]+-?)*[a-z\\u00a1-\\uffff0-9]+)*(?:\\.(?:[a-z\\u00a1-\\uffff]{2,})))|localhost)(?::\\d{2,5})?(?:(/|\\?|#)[^\\s]*)?$";
+    var url = new RegExp(urlRegex, "i");
+    return str.length < 2083 && url.test(str);
   }
 };

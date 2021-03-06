@@ -42,7 +42,7 @@ describe("POST route", () => {
     const response = await request(app)
       .post("/DataBase/database.json")
       .type("form")
-      .send({ url: "kladkshakjgh.com" });
+      .send({ url: "http://kladksjhjhakjjhsafgh.com" });
     expect(response.text).toBe("invalid hostname");
   });
 });
