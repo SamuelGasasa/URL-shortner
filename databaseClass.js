@@ -1,8 +1,9 @@
 module.exports = class DataBase {
   constructor(location) {
+    this.location = location;
     this.fs = require("fs");
     this.isValidHostname = require("is-valid-hostname");
-    this.database = JSON.parse(this.fs.readFileSync(location));
+    // this.database = JSON.parse(this.fs.readFileSync(location));
     this.validUrl = require("valid-url");
   }
 
@@ -14,11 +15,16 @@ module.exports = class DataBase {
   getById(req, res) {
     // console.log(this.database);
     const { shortUrl } = req.params;
-    const url = this.database.db.find((element) => element.id === shortUrl);
-    if (url) {
-      res.redirect(url.url);
-    }
-    res.send("No shortened url found in the database");
+    this.fs.readFile(this.location, (error, data) => {
+      data = JSON.parse(data);
+      const url = data.db.find((element) => element.id === shortUrl);
+      if (url) {
+        res.status(200).redirect(url.url);
+        return;
+      }
+      res.send("No shortened url found in the database");
+    });
+    // const url = this.database.db.find((element) => element.id === shortUrl);
   }
 
   postInData(req, res, id) {
