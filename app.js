@@ -34,7 +34,6 @@ app.get("/api/shorturl/:shortUrl", (req, res) => {
 
 app.post("/DataBase/database.json", (req, res) => {
   const id = uuid();
-  console.log(process.env.DATABASE);
   db.postInData(req, res, id);
 });
 

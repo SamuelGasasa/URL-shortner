@@ -55,10 +55,10 @@ module.exports = class DataBase {
 
   isExist(url) {
     if (this.database.db.find((element) => element.url === url)) {
-      console.log("truth");
+      //   console.log("truth");
       return true;
     }
-    console.log("false");
+    // console.log("false");
     return false;
   }
 

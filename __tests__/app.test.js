@@ -32,10 +32,17 @@ describe("GET route", () => {
 
 describe("POST route", () => {
   it("check if the input url is valid", async () => {
-    const response = await await request(app)
+    const response = await request(app)
       .post("/DataBase/database.json")
       .type(`form`)
       .send({ url: "samuel" });
     expect(response.text).toBe("invalid url");
+  });
+  it("check if the hostname is valid", async () => {
+    const response = await request(app)
+      .post("/DataBase/database.json")
+      .type("form")
+      .send({ url: "kladkshakjgh.com" });
+    expect(response.text).toBe("invalid hostname");
   });
 });
