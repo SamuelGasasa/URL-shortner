@@ -4,6 +4,50 @@ const cors = require("cors");
 const app = express();
 const fs = require("fs");
 const isValidHostname = require("is-valid-hostname");
+// const db = require("databaseClass.js");
+
+class DataBase {
+  constructor(location) {
+    this.db = JSON.parse(fs.readFileSync(location));
+  }
+
+  //   getDataBase() {
+  //     const dataBase = fs.readFileSync("./DataBase/database.json");
+  //     return JSON.parse(dataBase);
+  //   }
+
+  getById(req, res) {
+    const { shortUrl } = req.params;
+    const url = this.db.find((element) => element.id === shortUrl);
+    if (url) {
+      res.redirect(url.url);
+    }
+    res.send("<h1>No shortened url found in the database</h1>");
+  }
+
+  postInData(res, req) {
+    this.db.push(body);
+    fs.writeFileSync("./DataBase/database.json", JSON.stringify(db));
+  }
+
+  isExist(url) {
+    if (this.db.find((element) => element.url === url)) {
+      console.log("truth");
+      return true;
+    }
+    console.log("false");
+    return false;
+  }
+
+  isUrlValid(url) {
+    const res = url.match(
+      /(http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/g,
+    );
+    if (res == null) return false;
+    else return true;
+  }
+}
+const db = new DataBase("./DataBase/database.json");
 
 let ID = 0;
 app.use(cors());
@@ -12,26 +56,20 @@ app.use(express.urlencoded());
 
 app.use("/public", express.static(`./public`));
 
-function isUrlValid(url) {
-  var res = url.match(
-    /(http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/g,
-  );
-  if (res == null) return false;
-  else return true;
-}
+// isUrlValid(url) {
+//   var res = url.match(
+//     /(http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/g,
+//   );
+//   if (res == null) return false;
+//   else return true;
+// }
 
 app.get("/", (req, res) => {
   res.sendFile(__dirname + "/views/index.html");
 });
 
 app.get("/api/shorturl/:shortUrl", (req, res) => {
-  const { shortUrl } = req.params;
-  const db = new DataBase(req.body);
-  const url = db.getById(shortUrl);
-  if (url) {
-    res.redirect(url.url);
-  }
-  res.send("<h1>No shortened url found in the database</h1>");
+  db.getById(req, res);
 });
 
 app.post("/DataBase/database.json", (req, res) => {
@@ -62,43 +100,6 @@ app.post("/DataBase/database.json", (req, res) => {
     res.send("invalid url");
   }
 });
-
-class DataBase {
-  constructor(body) {
-    this.body = body;
-  }
-
-  getDataBase() {
-    const dataBase = fs.readFileSync("./DataBase/database.json");
-    return JSON.parse(dataBase);
-  }
-
-  getById(id) {
-    const db = this.getDataBase();
-    return db.find((element) => element.id === id);
-  }
-
-  postInData(body) {
-    const db = this.getDataBase();
-    db.push(body);
-    fs.writeFileSync("./DataBase/database.json", JSON.stringify(db));
-  }
-
-  isExist(url) {
-    const db = this.getDataBase();
-    if (db.find((element) => element.url === url)) {
-      console.log("truth");
-      return true;
-    }
-    console.log("false");
-    return false;
-  }
-
-  //   async writeFile(){
-  //       const dataBase=this.readFile();
-  //       console.lo
-  //   }
-}
 
 // const test = new DataBase();
 // test.readFile(testtest);
