@@ -7,11 +7,6 @@ module.exports = class DataBase {
     this.validUrl = require("valid-url");
   }
 
-  //   getDataBase() {
-  //     const dataBase = fs.readFileSync("./DataBase/database.json");
-  //     return JSON.parse(dataBase);
-  //   }
-
   getStats(req, res) {
     const { shorturlId } = req.params;
     this.fs.readFile(this.location, (error, data) => {
@@ -26,7 +21,6 @@ module.exports = class DataBase {
   }
 
   getById(req, res) {
-    // console.log(this.database);
     const { shortUrl } = req.params;
     this.fs.readFile(this.location, (error, data) => {
       data = JSON.parse(data);
@@ -41,7 +35,6 @@ module.exports = class DataBase {
       }
       res.send("No shortened url found in the database");
     });
-    // const url = this.database.db.find((element) => element.id === shortUrl);
   }
 
   postInData(req, res, id) {
@@ -49,7 +42,6 @@ module.exports = class DataBase {
     if (this.isExist(body)) {
       res.send("url already exist!");
     } else {
-      // this.fs.writeFile(this.location,)
       if (this.validUrl.isWebUri(body.url)) {
         console.log(body.url);
         if (this.isValidHostname(body.url)) {
@@ -77,10 +69,8 @@ module.exports = class DataBase {
 
   isExist(url) {
     if (this.database.db.find((element) => element.url === url)) {
-      //   console.log("truth");
       return true;
     }
-    // console.log("false");
     return false;
   }
 

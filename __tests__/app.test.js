@@ -78,7 +78,6 @@ describe("GET route", () => {
   it("should return the according the proper error if the url id is not found", async () => {
     const response = await request(app).get("/api/shorturl/1234");
     expect(response.status).toBe(200);
-    // console.log(response);
     expect(response.text).toBe("No shortened url found in the database");
   });
 
