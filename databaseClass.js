@@ -52,7 +52,7 @@ module.exports = class DataBase {
       // this.fs.writeFile(this.location,)
       if (this.validUrl.isWebUri(body.url)) {
         console.log(body.url);
-        if (this.isValidHostname("example.com")) {
+        if (this.isValidHostname(body.url)) {
           body.id = id;
           (body.stats = {
             creationDate: this.createDate(new Date()),
