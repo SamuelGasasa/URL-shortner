@@ -98,8 +98,7 @@ describe("POST route", () => {
   it("should check if the url already exists", async () => {
     const response = await request(app)
       .post("/api/shorturl/new")
-      .send({ url: "http://walla.co.il" });
-    // console.log(response);
+      .send({ url: "https://www.google.com/" });
     expect(response.text).toBe("url already exist!");
   });
 

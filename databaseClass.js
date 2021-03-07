@@ -78,20 +78,11 @@ module.exports = class DataBase {
   }
 
   isExist(url) {
-    // this.fs.readFile(this.location, (err, data) => {
-    //   data = JSON.parse(data);
-    //   const check = data.db.find((element) => element.url === url);
-    //   console.log(check);
-    //   if (data.db.find((element) => element.url === url)) {
-    //     return true;
-    //   } else {
-    //     return false;
-    //   }
-    // });
-
     this.fs.readFile(this.location, (error, data) => {
       data = JSON.parse(data);
+      console.log(data);
       const isExist = data.db.find((element) => element.url === url);
+      console.log(isExist);
       if (isExist) {
         return true;
       } else {
