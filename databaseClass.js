@@ -46,7 +46,6 @@ module.exports = class DataBase {
     this.fs.readFile(this.location, (err, data) => {
       // const { body } = req;
       data = JSON.parse(data);
-      data.db.push(body);
 
       // if (this.isExist(body.url)) {
       //   console.log("got here");
