@@ -95,16 +95,26 @@ describe("GET route", () => {
 });
 
 describe("POST route", () => {
+  it("should check if the url already exists", async () => {
+    const response = await request(app)
+      .post("/api/shorturl/new")
+      .send({ url: "http://walla.co.il" });
+    // console.log(response);
+    expect(response.text).toBe("url already exist!");
+  });
+
   it("check if the input url is valid", async () => {
     const response = await request(app)
-      .post("/DataBase/database.json")
+      .post("/api/shorturl/new")
       .type(`form`)
       .send({ url: "samuel" });
+    // console.log(response);
     expect(response.text).toBe("invalid url");
   });
+
   it("check if the hostname is valid", async () => {
     const response = await request(app)
-      .post("/DataBase/database.json")
+      .post("/api/shorturl/new")
       .type("form")
       .send({ url: "http://kladksjhjhakjjhsafgh.com" });
     expect(response.text).toBe("invalid hostname");

@@ -29,7 +29,7 @@ app.get("/api/statistic/:shorturlId", (req, res) => {
   db.getStats(req, res);
 });
 
-app.post("/DataBase/database.json", (req, res) => {
+app.post("/api/shorturl/new", (req, res) => {
   const id = uuid();
   db.postInData(req, res, id);
 });

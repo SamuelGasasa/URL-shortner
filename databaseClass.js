@@ -3,7 +3,6 @@ module.exports = class DataBase {
     this.location = location;
     this.fs = require("fs");
     this.isValidHostname = require("is-valid-hostname");
-    this.database = JSON.parse(this.fs.readFileSync(location));
     this.validUrl = require("valid-url");
   }
 
@@ -39,23 +38,34 @@ module.exports = class DataBase {
 
   postInData(req, res, id) {
     const { body } = req;
-    if (this.isExist(body)) {
+    if (this.isExist(body.url)) {
+      console.log("got here");
       res.send("url already exist!");
-    } else {
+      return;
+    }
+    this.fs.readFile(this.location, (err, data) => {
+      // const { body } = req;
+      data = JSON.parse(data);
+      data.db.push(body);
+
+      // if (this.isExist(body.url)) {
+      //   console.log("got here");
+      //   res.send("url already exist!");
+      //   return;
+      // } else {
       if (this.validUrl.isWebUri(body.url)) {
-        console.log(body.url);
         if (this.isValidHostname(body.url)) {
           body.id = id;
-          (body.stats = {
+          body.stats = {
             creationDate: this.createDate(new Date()),
             redirect: 0,
             originalUrl: body.url,
             "shorturl-id": id,
-          }),
-            this.database.db.push(body);
+          };
+          data.db.push(body);
           this.fs.writeFileSync(
             "./DataBase/database.json",
-            JSON.stringify(this.database),
+            JSON.stringify(data),
           );
           res.send(body);
           return;
@@ -64,14 +74,30 @@ module.exports = class DataBase {
         return;
       }
       res.send("invalid url");
-    }
+    });
   }
 
   isExist(url) {
-    if (this.database.db.find((element) => element.url === url)) {
-      return true;
-    }
-    return false;
+    // this.fs.readFile(this.location, (err, data) => {
+    //   data = JSON.parse(data);
+    //   const check = data.db.find((element) => element.url === url);
+    //   console.log(check);
+    //   if (data.db.find((element) => element.url === url)) {
+    //     return true;
+    //   } else {
+    //     return false;
+    //   }
+    // });
+
+    this.fs.readFile(this.location, (error, data) => {
+      data = JSON.parse(data);
+      const isExist = data.db.find((element) => element.url === url);
+      if (isExist) {
+        return true;
+      } else {
+        return false;
+      }
+    });
   }
 
   isValidURL(str) {
